@@ -28,6 +28,8 @@ import (
 	"k8s.io/kubernetes/pkg/api/unversioned"
 	"k8s.io/kubernetes/pkg/apis/apps"
 	"k8s.io/kubernetes/pkg/client/record"
+	"k8s.io/kubernetes/pkg/client/typed/discovery"
+	client_unversioned "k8s.io/kubernetes/pkg/client/unversioned"
 	"k8s.io/kubernetes/pkg/types"
 	"k8s.io/kubernetes/pkg/util/sets"
 )
@@ -321,5 +323,113 @@ func (f *fakePetClient) DeletePVCs(pet *pcb) error {
 	if deleteClaimNames.Len() != 0 {
 		return fmt.Errorf("Claims %+v don't exist. Failed deletion.", deleteClaimNames)
 	}
+	return nil
+}
+
+// Client is the mock of a Kubernetes client.
+type fakeKubeClient struct {
+	petSetStatus func(*apps.PetSet) (*apps.PetSet, error)
+}
+
+func (c *fakeKubeClient) ReplicationControllers(namespace string) client_unversioned.ReplicationControllerInterface {
+	return nil
+}
+
+func (c *fakeKubeClient) Nodes() client_unversioned.NodeInterface {
+	return nil
+}
+
+func (c *fakeKubeClient) Events(namespace string) client_unversioned.EventInterface {
+	return nil
+}
+
+func (c *fakeKubeClient) Endpoints(namespace string) client_unversioned.EndpointsInterface {
+	return nil
+}
+
+func (c *fakeKubeClient) Pods(namespace string) client_unversioned.PodInterface {
+	return nil
+}
+
+func (c *fakeKubeClient) PodTemplates(namespace string) client_unversioned.PodTemplateInterface {
+	return nil
+}
+
+func (c *fakeKubeClient) Services(namespace string) client_unversioned.ServiceInterface {
+	return nil
+}
+func (c *fakeKubeClient) LimitRanges(namespace string) client_unversioned.LimitRangeInterface {
+	return nil
+}
+
+func (c *fakeKubeClient) ResourceQuotas(namespace string) client_unversioned.ResourceQuotaInterface {
+	return nil
+}
+
+func (c *fakeKubeClient) ServiceAccounts(namespace string) client_unversioned.ServiceAccountsInterface {
+	return nil
+}
+
+func (c *fakeKubeClient) Secrets(namespace string) client_unversioned.SecretsInterface {
+	return nil
+}
+
+func (c *fakeKubeClient) Namespaces() client_unversioned.NamespaceInterface {
+	return nil
+}
+
+func (c *fakeKubeClient) PersistentVolumes() client_unversioned.PersistentVolumeInterface {
+	return nil
+}
+
+func (c *fakeKubeClient) PersistentVolumeClaims(namespace string) client_unversioned.PersistentVolumeClaimInterface {
+	return nil
+}
+
+func (c *fakeKubeClient) ComponentStatuses() client_unversioned.ComponentStatusInterface {
+	return nil
+}
+
+func (c *fakeKubeClient) ConfigMaps(namespace string) client_unversioned.ConfigMapsInterface {
+	return nil
+}
+
+func (c *fakeKubeClient) Authorization() client_unversioned.AuthorizationInterface {
+	return nil
+}
+
+func (c *fakeKubeClient) Autoscaling() client_unversioned.AutoscalingInterface {
+	return nil
+}
+
+func (c *fakeKubeClient) Authentication() client_unversioned.AuthenticationInterface {
+	return nil
+}
+
+func (c *fakeKubeClient) Batch() client_unversioned.BatchInterface {
+	return nil
+}
+
+func (c *fakeKubeClient) Extensions() client_unversioned.ExtensionsInterface {
+	return nil
+}
+
+func (c *fakeKubeClient) Apps() client_unversioned.AppsInterface {
+	return nil
+}
+
+func (c *fakeKubeClient) Rbac() client_unversioned.RbacInterface {
+	return nil
+}
+
+func (c *fakeKubeClient) Policy() client_unversioned.PolicyInterface {
+	return nil
+}
+
+func (c *fakeKubeClient) Discovery() discovery.DiscoveryInterface {
+	return nil
+}
+
+func (c *fakeKubeClient) Certificates() client_unversioned.CertificatesInterface {
 	return nil
 }

@@ -264,12 +264,29 @@ func TestPetSetBlockingPetIsCleared(t *testing.T) {
 	}
 }
 
-// TODO(mkwiek): test if the petset.Status.Replicas is actually correct
-func TestPetSetReplicaCount(t *testing.T) {
+func TestSyncPetSetBlockedPet(t *testing.T) {
 	psc, fc := newFakePetSetController()
 	ps := newPetSet(3)
 	i, _ := psc.syncPetSet(ps, fc.getPodList())
 	if i != len(fc.getPodList()) {
 		t.Errorf("syncPetSet should return actual amount of pods")
+	}
+}
+
+func TestPetSetReplicaCount(t *testing.T) {
+	psc, fc := newFakePetSetController()
+	psc.kubeClient = &fakeKubeClient{}
+	ps := newPetSet(3)
+	scalePetSet(t, ps, psc, fc, 1)
+
+	// 1 not yet healthy pet
+	psc.syncPetSet(ps, fc.getPodList())
+
+	if errs := psc.Sync(fmt.Sprintf("%v/%v", ps.Namespace, ps.Name)); len(errs) != 0 {
+		t.Errorf("Error during sync of deleted petset %v", errs)
+	}
+
+	if ps.Status.Replicas != 1 {
+		t.Errorf("Expected Status.Replicas to be 1, is %d instead\n", ps.Status.Replicas)
 	}
 }

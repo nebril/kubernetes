@@ -50,7 +50,7 @@ const (
 
 // PetSetController controls petsets.
 type PetSetController struct {
-	kubeClient *client.Client
+	kubeClient client.Interface
 
 	// newSyncer returns an interface capable of syncing a single pet.
 	// Abstracted out for testing.
@@ -283,11 +283,13 @@ func (psc *PetSetController) Sync(key string) []error {
 		glog.V(4).Infof("Finished syncing pet set %q (%v)", key, time.Now().Sub(startTime))
 	}()
 
+	fmt.Println("trolo1")
 	if !psc.podStoreSynced() {
 		// Sleep so we give the pod reflector goroutine a chance to run.
 		time.Sleep(PodStoreSyncedPollPeriod)
 		return []error{fmt.Errorf("waiting for pods controller to sync")}
 	}
+	fmt.Println("trolo2")
 
 	obj, exists, err := psc.psStore.Store.GetByKey(key)
 	if !exists {
@@ -297,6 +299,7 @@ func (psc *PetSetController) Sync(key string) []error {
 		glog.Infof("PetSet has been deleted %v", key)
 		return []error{}
 	}
+	fmt.Println("trolo3")
 	if err != nil {
 		glog.Errorf("Unable to retrieve PetSet %v from store: %v", key, err)
 		return []error{err}
@@ -307,6 +310,7 @@ func (psc *PetSetController) Sync(key string) []error {
 	if err != nil {
 		return []error{err}
 	}
+	fmt.Println("trolo4")
 
 	numPets, errs := psc.syncPetSet(&ps, petList)
 	if err := updatePetCount(psc.kubeClient, ps, numPets); err != nil {

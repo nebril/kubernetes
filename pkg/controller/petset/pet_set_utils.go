@@ -44,10 +44,12 @@ func (o overlappingPetSets) Less(i, j int) bool {
 }
 
 // updatePetCount attempts to update the Status.Replicas of the given PetSet, with a single GET/PUT retry.
-func updatePetCount(kubeClient *client.Client, ps apps.PetSet, numPets int) (updateErr error) {
+func updatePetCount(kubeClient client.Interface, ps apps.PetSet, numPets int) (updateErr error) {
+	glog.Errorf("beforenil")
 	if ps.Status.Replicas == numPets || kubeClient == nil {
 		return nil
 	}
+	glog.Errorf("afternil")
 	psClient := kubeClient.Apps().PetSets(ps.Namespace)
 	var getErr error
 	for i, ps := 0, &ps; ; i++ {
